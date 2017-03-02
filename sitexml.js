@@ -133,7 +133,8 @@ function sitexml (path) {
                             id : themes[i].getAttribute('id'),
                             dir : themes[i].getAttribute('dir'),
                             file : themes[i].getAttribute('file'),
-                            default : themes[i].getAttribute('default')
+                            default : themes[i].getAttribute('default'),
+                            name : themes[i].getAttribute('name')
                         }
                     };
                     theme.content = getContent(themes[i]);
