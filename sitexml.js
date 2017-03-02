@@ -10,7 +10,7 @@
  *
  * Usage:
  *
- * var sitexml = new sitexml();
+ * var SiteXML = new sitexml();
  *
  */
 
