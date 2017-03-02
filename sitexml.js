@@ -22,7 +22,6 @@ function sitexml (path) {
     /*
     Executes ?sitexml STP command
     triggers 'sitexml.is.loaded' event
-    saves
      */
     this.loadSitexml = function () {
         var me = this;
