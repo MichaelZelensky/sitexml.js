@@ -63,23 +63,6 @@ function sitexml (path) {
                 str += '/?cid=' + id;
                 loadedContent.id = id;
             }
-        /*//filename
-        } else if ((typeof id).toLowerCase() === 'string') {
-            if (str !== '' && str[str.length - 1] !== '/') {
-                str += '/';
-            }
-            str += '.content/' + encodeURI(id);
-            loadedContent.filename = id;
-        //cid & name
-        } else if ((typeof id).toLowerCase() === 'object') {
-            if (id.id) {
-                id.id = id.id * 1;
-            }
-            if (id.id && id.name) {
-                str += '?id=' + id.id + '&name=' + encodeURI(id.name);
-                loadedContent.pid = id.id;
-                loadedContent.name = id.name;
-            }*/
         }
         this.httpGetAsync(str, function (r) {
             loadedContent.content = r;
@@ -216,8 +199,13 @@ function sitexml (path) {
     this.httpGetAsync = function (theUrl, callback) {
         var xmlHttp = new XMLHttpRequest();
         xmlHttp.onreadystatechange = function() {
-            if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
-                callback(xmlHttp.responseText);
+            if (xmlHttp.readyState == 4) {
+                if (xmlHttp.status == 200) {
+                    callback(xmlHttp.responseText);
+                } else if (Math.floor(xmlHttp.status / 100) === 4 || Math.floor(xmlHttp.status / 100) === 5) {
+                    callback('Content file error: ' + xmlHttp.status);
+                }
+            }
         };
         xmlHttp.open("GET", theUrl, true); // true for asynchronous
         xmlHttp.send(null);
