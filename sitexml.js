@@ -103,9 +103,9 @@ function sitexml (path) {
                             break loop1;
                         }
                     }
-                    if (!content && p[i].pages && p[i].pages.length > 0) {
-                        content = this.getContentById(cid, p[i]);
-                    }
+                }
+                if (!content && p[i].pages && p[i].pages.length > 0) {
+                    content = this.getContentById(cid, p[i]);
                 }
         }
         return content;
