@@ -28,7 +28,7 @@
 
 function sitexml (path) {
 
-    this.path = path || '/';
+    this.path = path || ''; //without closing slash "/"
 
     /*
     * Executes ?sitexml STP command
@@ -40,7 +40,7 @@ function sitexml (path) {
     */
     this.loadSitexml = function () {
         var me = this;
-        this.httpGetAsync(this.path + '?sitexml', function (r) {
+        this.httpGetAsync(this.path + '/?sitexml', function (r) {
             me.sitexml = r;
             me.sitexmlObj = me.parseXML(r);
             me.siteObj = me.getSiteObj();
