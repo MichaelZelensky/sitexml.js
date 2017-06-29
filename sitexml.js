@@ -28,7 +28,7 @@
 
 function sitexml (path) {
 
-    this.path = path || '';
+    this.path = path || '/';
 
     /*
     * Executes ?sitexml STP command
