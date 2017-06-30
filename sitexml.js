@@ -44,7 +44,9 @@ function sitexml (path) {
             me.sitexml = r;
             me.sitexmlObj = me.parseXML(r);
             me.siteObj = me.getSiteObj();
-            me.triggerEvent(window, 'sitexml.is.loaded');
+            if (me.sitexmlObj.childNodes[0] && me.sitexmlObj.childNodes[0].nodeName.toLowerCase() === "site") {
+                me.triggerEvent(window, 'sitexml.is.loaded');
+            }
         });
     };
 
