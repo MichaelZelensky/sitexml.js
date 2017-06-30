@@ -31,13 +31,13 @@ function sitexml (path) {
     this.path = path || ''; //without closing slash "/"
 
     /*
-    * Executes ?sitexml STP command
-    * Triggers 'sitexml.is.loaded' event
-    * Creates the following properties:
-    *   this.sitexml - raw server response body
-    *   this.sitexmlObj - .site.xml parsed, resulting in document type javascript object
-    *   this.siteObj - javascript object representing the site
-    */
+     * Executes ?sitexml STP command
+     * Triggers 'sitexml.is.loaded' event
+     * Creates the following properties:
+     *   this.sitexml - raw server response body
+     *   this.sitexmlObj - .site.xml parsed, resulting in document type javascript object
+     *   this.siteObj - javascript object representing the site
+     */
     this.loadSitexml = function () {
         var me = this;
         this.httpGetAsync(this.path + '/?sitexml', function (r) {
@@ -46,14 +46,16 @@ function sitexml (path) {
             me.siteObj = me.getSiteObj();
             if (me.sitexmlObj.childNodes[0] && me.sitexmlObj.childNodes[0].nodeName.toLowerCase() === "site") {
                 me.triggerEvent(window, 'sitexml.is.loaded');
+            } else {
+                me.triggerEvent(window, 'sitexml.is.not.valid');
             }
         });
     };
 
     /*
-    Loads content by id, filename, or page id + content name
-    Caches the loaded content in this.content
-    @Param {Integer} id - get content by id
+     Loads content by id, filename, or page id + content name
+     Caches the loaded content in this.content
+     @Param {Integer} id - get content by id
      */
     this.loadContent = function (id) {
         var me = this,
@@ -88,10 +90,10 @@ function sitexml (path) {
     };
 
     /*
-    * Recursive
-    *
-    * Returns content object by content id
-    * */
+     * Recursive
+     *
+     * Returns content object by content id
+     * */
     this.getContentById = function (cid, parent) {
         var parent = parent || this.siteObj,
             content = undefined,
@@ -106,19 +108,19 @@ function sitexml (path) {
                         }
                     }
                 }
-                if (!content && p[i].pages && p[i].pages.length > 0) {
-                    content = this.getContentById(cid, p[i]);
-                }
+            if (!content && p[i].pages && p[i].pages.length > 0) {
+                content = this.getContentById(cid, p[i]);
+            }
         }
         return content;
     };
 
     /*
-    * Recursive
-    * @param {Integer} id - page id
-    * @param {Object} parent
-    * @requires this.siteObj
-    * */
+     * Recursive
+     * @param {Integer} id - page id
+     * @param {Object} parent
+     * @requires this.siteObj
+     * */
     this.getPageById = function (id, parent) {
         var page;
         parent = parent || (this.siteObj);
@@ -136,8 +138,8 @@ function sitexml (path) {
     };
 
     /*
-    * Returns default theme if PAGE@theme is not defined (see algorithm: http://sitexml.info/algorithms)
-    * */
+     * Returns default theme if PAGE@theme is not defined (see algorithm: http://sitexml.info/algorithms)
+     * */
     this.getDefaultTheme = function () {
         var theme = undefined;
         if (this.siteObj.themes && this.siteObj.themes.length > 0) {
@@ -154,10 +156,10 @@ function sitexml (path) {
     };
 
     /*
-    * Returns theme object for a page, see algorithm here: http://sitexml.info/algorithms
-    * @param {Integer} id - page id
-    * @requires this.siteObj
-    * */
+     * Returns theme object for a page, see algorithm here: http://sitexml.info/algorithms
+     * @param {Integer} id - page id
+     * @requires this.siteObj
+     * */
     this.getPageTheme = function (id, parent) {
         var tid, theme, page;
         if (id) {
@@ -283,10 +285,10 @@ function sitexml (path) {
         }
 
         /*
-        Returns page objects of the given parent element of the site tree
-        @returns {Array} - of objects
-        @param {DOM Object} - parent element
-        */
+         Returns page objects of the given parent element of the site tree
+         @returns {Array} - of objects
+         @param {DOM Object} - parent element
+         */
         function getPages(parent) {
             var ps, page, pages, subpages;
             if (parent && parent.getElementsByTagName) {
@@ -299,17 +301,17 @@ function sitexml (path) {
                     pages = [];
                     for (var i = 0, n = ps.length; i < n; i++) { if (ps.hasOwnProperty(i)) {
                         page = {
-                                attributes : {
-                                    id : ps[i].getAttribute('id'),
-                                        name : ps[i].getAttribute('name'),
-                                        alias : ps[i].getAttribute('alias'),
-                                        theme : ps[i].getAttribute('theme'),
-                                        nonavi : ps[i].getAttribute('nonavi'),
-                                        startpage : ps[i].getAttribute('type')
-                                },
-                                content : getContent(ps[i]),
-                                metas : getMeta(ps[i])
-                            };
+                            attributes : {
+                                id : ps[i].getAttribute('id'),
+                                name : ps[i].getAttribute('name'),
+                                alias : ps[i].getAttribute('alias'),
+                                theme : ps[i].getAttribute('theme'),
+                                nonavi : ps[i].getAttribute('nonavi'),
+                                startpage : ps[i].getAttribute('type')
+                            },
+                            content : getContent(ps[i]),
+                            metas : getMeta(ps[i])
+                        };
                         subpages = getPages(ps[i]);
                         if (subpages) {
                             page.pages = subpages;
@@ -322,9 +324,9 @@ function sitexml (path) {
         }
 
         /*
-        Returns meta objects of the given parent element of the site tree
-        @returns {Array} - of objects
-        @param {DOM Object} - parent element
+         Returns meta objects of the given parent element of the site tree
+         @returns {Array} - of objects
+         @param {DOM Object} - parent element
          */
         function getMeta (parent) {
             var metas, meta;
@@ -354,9 +356,9 @@ function sitexml (path) {
         }
 
         /*
-        Returns content objects of the given parent element of the site tree
-        @returns {Array} - of objects
-        @param {DOM Object} - parent element
+         Returns content objects of the given parent element of the site tree
+         @returns {Array} - of objects
+         @param {DOM Object} - parent element
          */
         function getContent(parent) {
             var cs, content;
