@@ -16,6 +16,8 @@
  *
  * loadSitexml ()
  * loadContent (id)
+ * saveContent (id, content)
+ * saveXML (xmlstr)
  * getContentIdByPIDandName (id, [parent])
  * getPageById (id)
  * getContentIdByPidPname(pid, name)
@@ -73,6 +75,34 @@ function sitexml (path) {
             me.content = me.content || {};
             me.content[id + ''] = r;
             me.triggerEvent(window, 'content.is.loaded', {cid: id});
+        });
+    };
+
+    //
+    this.saveContent = function(id, content) {
+        var me = this,
+            params,
+            str = this.path;
+        if ((typeof id).toLowerCase() === 'number' || id * 1) {
+            id = id * 1;
+            if (id) {
+                str += '/';
+                params = "cid=" + id + "&content=" + encodeURIComponent(content)
+                this.httpPostAsync(str, params, function (r) {
+                    me.triggerEvent(window, 'content.is.saved', {cid: id});
+                });
+            }
+        }
+    };
+
+    //
+    this.saveXML = function(xmlstr) {
+        var me = this,
+            params,
+            str = this.path + '/';
+        params = "sitexml=" + encodeURIComponent(content)
+        this.httpPostAsync(str, params, function (r) {
+            me.triggerEvent(window, 'xml.is.saved');
         });
     };
 
@@ -213,6 +243,24 @@ function sitexml (path) {
         };
         xmlHttp.open("GET", theUrl, true); // true for asynchronous
         xmlHttp.send(null);
+    };
+
+    //https://stackoverflow.com/questions/9713058/send-post-data-using-xmlhttprequest
+    this.httpPostAsync = function (theUrl, params, callback) {
+        var xmlHttp = new XMLHttpRequest();
+        xmlHttp.onreadystatechange = function() {
+            if (xmlHttp.readyState == 4) {
+                if (xmlHttp.status == 200) {
+                    callback(xmlHttp.responseText);
+                } else if (Math.floor(xmlHttp.status / 100) === 4 || Math.floor(xmlHttp.status / 100) === 5) {
+                    callback('Content file error: ' + xmlHttp.status);
+                }
+            }
+        };
+        xmlHttp.open("POST", theUrl, true); // true for asynchronous
+        //Send the proper header information along with the request
+        xmlHttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xmlHttp.send(params);
     };
 
     //
