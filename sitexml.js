@@ -105,7 +105,7 @@ function sitexml (path) {
         var me = this,
             params,
             str = this.path + '/';
-        params = "sitexml=" + encodeURIComponent(content)
+        params = "sitexml=" + xmlstr;
         this.httpPostAsync(str, params, function (r) {
             if (r === '401') {
                 me.triggerEvent(window, 'xml.not.saved.401');
