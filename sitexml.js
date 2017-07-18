@@ -89,7 +89,12 @@ function sitexml (path) {
                 str += '/';
                 params = "cid=" + id + "&content=" + encodeURIComponent(content)
                 this.httpPostAsync(str, params, function (r) {
-                    me.triggerEvent(window, 'content.is.saved', {cid: id});
+                    if (r === '401') {
+                        me.triggerEvent(window, 'content.not.saved.401', {cid: id});
+                    } else {
+                        me.triggerEvent(window, 'content.is.saved', {cid: id});
+                    }
+
                 });
             }
         }
@@ -102,7 +107,11 @@ function sitexml (path) {
             str = this.path + '/';
         params = "sitexml=" + encodeURIComponent(content)
         this.httpPostAsync(str, params, function (r) {
-            me.triggerEvent(window, 'xml.is.saved');
+            if (r === '401') {
+                me.triggerEvent(window, 'xml.not.saved.401');
+            } else {
+                me.triggerEvent(window, 'xml.is.saved');
+            }
         });
     };
 
@@ -252,6 +261,8 @@ function sitexml (path) {
             if (xmlHttp.readyState == 4) {
                 if (xmlHttp.status == 200) {
                     callback(xmlHttp.responseText);
+                } else if (xmlHttp.status == 401) {
+                    callback('401');
                 } else if (Math.floor(xmlHttp.status / 100) === 4 || Math.floor(xmlHttp.status / 100) === 5) {
                     callback('Content file error: ' + xmlHttp.status);
                 }
