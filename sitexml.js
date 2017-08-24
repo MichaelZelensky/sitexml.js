@@ -334,6 +334,7 @@ function sitexml (path) {
                             dir : themes[i].getAttribute('dir'),
                             file : themes[i].getAttribute('file'),
                             default : themes[i].getAttribute('default'),
+                            ajaxbrowsing : (themes[i].getAttribute('ajaxbrowsing')||'').trim(),
                             name : themes[i].getAttribute('name')
                         }
                     };
