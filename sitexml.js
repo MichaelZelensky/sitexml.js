@@ -2,18 +2,20 @@
  *
  * SiteXML JavaScript class
  *
- * https://github.com/MichaelZelensky/sitexml.js
- * https://sitexml.info/sitexml.js
- *
- * @author Michael Zelensky http://miha.in (c) 2017
+ * @author Michael Zelensky http://miha.in, contributor Aleksei Kolola https://twitter.com/a_kolola (c) 2017-2022
  * @license MIT
  *
- * Usage:
+ * Repository:
+ * https://github.com/MichaelZelensky/sitexml.js
  *
+ * Description:
+ * https://sitexml.info/sitexml.js
+ *
+ *
+ * Usage:
  * var SiteXML = new sitexml();
  *
  * "Public" methods (methods that are supposed to be used as public):
- *
  * loadSitexml ()
  * loadContent (id)
  * saveContent (id, content)
@@ -24,7 +26,6 @@
  * getDefaultTheme()
  * getPageTheme(pid)
  * getThemeById(theme_id)
- *
  */
 
 
@@ -32,13 +33,13 @@ function sitexml (path) {
 
     this.path = path || ''; //without closing slash "/"
 
-    /*
-     * Executes ?sitexml STP command
-     * Triggers 'sitexml.is.loaded' event
+    /**
+     * Executes ?sitexml STP command.
+     * Triggers 'sitexml.is.loaded' event.
      * Creates the following properties:
-     *   this.sitexml - raw server response body
-     *   this.sitexmlObj - .site.xml parsed, resulting in document type javascript object
-     *   this.siteObj - javascript object representing the site
+     *   - this.sitexml - raw server response body;
+     *   - this.sitexmlObj - .site.xml parsed, resulting in document type javascript object;
+     *   - this.siteObj - javascript object representing the site.
      */
     this.loadSitexml = function () {
         var me = this;
@@ -54,10 +55,11 @@ function sitexml (path) {
         });
     };
 
-    /*
-     Loads content by id, filename, or page id + content name
-     Caches the loaded content in this.content
-     @Param {Integer} id - get content by id
+    /**
+     * Loads content by id, filename, or page id + content name.
+     * Caches the loaded content in this.content.
+	 *
+     * @Param {Integer} id - get content by id.
      */
     this.loadContent = function (id) {
         var me = this,
@@ -78,7 +80,12 @@ function sitexml (path) {
         });
     };
 
-    //
+    /**
+     * Saves content by itd id, content name.
+	 *
+     * @Param {Integer} id - content id.
+	 * @Param {String} content - content name.
+     */
     this.saveContent = function(id, content) {
         var me = this,
             params,
@@ -100,7 +107,11 @@ function sitexml (path) {
         }
     };
 
-    //
+    /**
+     * Saves XML as string.
+	 *
+	 * @Param {String} xmlstr - XML represented as string.
+     */
     this.saveXML = function(xmlstr) {
         var me = this,
             params,
@@ -130,7 +141,8 @@ function sitexml (path) {
 
     /*
      * Recursive
-     *
+     * @param {Integer} cid - content id
+	 * @param {Object} parent
      * Returns content object by content id
      * */
     this.getContentById = function (cid, parent) {
@@ -195,9 +207,10 @@ function sitexml (path) {
     };
 
     /*
-     * Returns theme object for a page, see algorithm here: http://sitexml.info/algorithms
      * @param {Integer} id - page id
      * @requires this.siteObj
+	 * @param {Object} parent
+	 * Returns theme object for a page, see algorithm here: http://sitexml.info/algorithms
      * */
     this.getPageTheme = function (id, parent) {
         var tid, theme, page;
@@ -345,10 +358,10 @@ function sitexml (path) {
         }
 
         /*
-         Returns page objects of the given parent element of the site tree
-         @returns {Array} - of objects
-         @param {DOM Object} - parent element
-         */
+         * Returns page objects of the given parent element of the site tree
+         * @returns {Array} - of objects
+         * @param {DOM Object} - parent element
+         * */
         function getPages(parent) {
             var ps, page, pages, subpages;
             if (parent && parent.getElementsByTagName) {
