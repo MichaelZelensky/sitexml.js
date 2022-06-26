@@ -59,7 +59,7 @@ function sitexml (path) {
      * Loads content by id, filename, or page id + content name.
      * Caches the loaded content in this.content.
 	 *
-     * @Param {Integer} id - get content by id.
+     * @param {Integer} id - get content by id.
      */
     this.loadContent = function (id) {
         var me = this,
@@ -81,10 +81,10 @@ function sitexml (path) {
     };
 
     /**
-     * Saves content by itd id, content name.
+     * Saves content by its id, content name.
 	 *
-     * @Param {Integer} id - content id.
-	 * @Param {String} content - content name.
+     * @param {Integer} id - content id.
+	 * @param {String} content - content name.
      */
     this.saveContent = function(id, content) {
         var me = this,
@@ -110,7 +110,7 @@ function sitexml (path) {
     /**
      * Saves XML as string.
 	 *
-	 * @Param {String} xmlstr - XML represented as string.
+	 * @param {String} xmlstr - XML represented as string.
      */
     this.saveXML = function(xmlstr) {
         var me = this,
@@ -126,7 +126,13 @@ function sitexml (path) {
         });
     };
 
-    /**/
+    /**
+     * Gets content by page id, page name.
+     * Caches the loaded content in this.content.
+	 *
+     * @param {Integer} pid - page id.
+	 * @param {String} id - page name.
+     */
     this.getContentIdByPidPname = function (pid, name) {
         var page = this.getPageById(pid);
         if (page && page.content) {
@@ -139,12 +145,13 @@ function sitexml (path) {
         return undefined;
     };
 
-    /*
-     * Recursive
-     * @param {Integer} cid - content id
-	 * @param {Object} parent
-     * Returns content object by content id
-     * */
+    /**
+     * Recursive function, which returns content object by content id.
+	 *
+     * @param {Integer} cid - content id.
+	 * @param {Object} parent.
+ 	 * @return {String} content.
+     */
     this.getContentById = function (cid, parent) {
         var parent = parent || this.siteObj,
             content = undefined,
@@ -166,12 +173,14 @@ function sitexml (path) {
         return content;
     };
 
-    /*
-     * Recursive
-     * @param {Integer} id - page id
-     * @param {Object} parent
-     * @requires this.siteObj
-     * */
+    /**
+     * Recursive function, which gets page by id, parent.
+	 *
+     * @param {Integer} id - page id.
+     * @param {Object} parent.
+     * @requires this.siteObj.
+	 * @return {undefined} undefined.
+     */
     this.getPageById = function (id, parent) {
         var page;
         parent = parent || (this.siteObj);
@@ -188,9 +197,11 @@ function sitexml (path) {
         return undefined;
     };
 
-    /*
+    /**
      * Returns default theme if PAGE@theme is not defined (see algorithm: http://sitexml.info/algorithms)
-     * */
+	 *
+	 * @return {undefined} theme.
+     */
     this.getDefaultTheme = function () {
         var theme = undefined;
         if (this.siteObj.themes && this.siteObj.themes.length > 0) {
