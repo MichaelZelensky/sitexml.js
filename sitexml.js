@@ -2,18 +2,20 @@
  *
  * SiteXML JavaScript class
  *
- * https://github.com/MichaelZelensky/sitexml.js
- * https://sitexml.info/sitexml.js
- *
- * @author Michael Zelensky http://miha.in (c) 2017
+ * @author Michael Zelensky http://miha.in, contributor Aleksei Kolola https://twitter.com/a_kolola (c) 2017-2022
  * @license MIT
  *
- * Usage:
+ * Repository:
+ * https://github.com/MichaelZelensky/sitexml.js
  *
+ * Description:
+ * https://sitexml.info/sitexml.js
+ *
+ *
+ * Usage:
  * var SiteXML = new sitexml();
  *
  * "Public" methods (methods that are supposed to be used as public):
- *
  * loadSitexml ()
  * loadContent (id)
  * saveContent (id, content)
@@ -32,13 +34,13 @@ function sitexml (path) {
 
     this.path = path || ''; //without closing slash "/"
 
-    /*
-     * Executes ?sitexml STP command
-     * Triggers 'sitexml.is.loaded' event
+    /**
+     * Executes '?sitexml' STP command.
+     * Triggers 'sitexml.is.loaded' event.
      * Creates the following properties:
-     *   this.sitexml - raw server response body
-     *   this.sitexmlObj - .site.xml parsed, resulting in document type javascript object
-     *   this.siteObj - javascript object representing the site
+     *   - this.sitexml - raw server response body;
+     *   - this.sitexmlObj - .site.xml parsed, resulting in document type javascript object;
+     *   - this.siteObj - javascript object representing the site.
      */
     this.loadSitexml = function () {
         var me = this;
@@ -54,10 +56,11 @@ function sitexml (path) {
         });
     };
 
-    /*
-     Loads content by id, filename, or page id + content name
-     Caches the loaded content in this.content
-     @Param {Integer} id - get content by id
+    /**
+     * Loads content by id, filename, or page id + content name.
+     * Caches the loaded content in this.content.
+	 *
+     * @param {Integer} id - get content by id.
      */
     this.loadContent = function (id) {
         var me = this,
@@ -78,7 +81,12 @@ function sitexml (path) {
         });
     };
 
-    //
+    /**
+     * Saves content by its id, content name.
+	 *
+     * @param {Integer} id - content id.
+	 * @param {String} content - content name.
+     */
     this.saveContent = function(id, content) {
         var me = this,
             params,
@@ -100,7 +108,11 @@ function sitexml (path) {
         }
     };
 
-    //
+    /**
+     * Saves XML as string.
+	 *
+	 * @param {String} xmlstr - XML represented as string.
+     */
     this.saveXML = function(xmlstr) {
         var me = this,
             params,
@@ -115,7 +127,13 @@ function sitexml (path) {
         });
     };
 
-    /**/
+    /**
+     * Gets content by page id, page name.
+     * Caches the loaded content in this.content.
+	 *
+     * @param {Integer} pid - page id.
+	 * @param {String} id - page name.
+     */
     this.getContentIdByPidPname = function (pid, name) {
         var page = this.getPageById(pid);
         if (page && page.content) {
@@ -128,11 +146,13 @@ function sitexml (path) {
         return undefined;
     };
 
-    /*
-     * Recursive
-     *
-     * Returns content object by content id
-     * */
+    /**
+     * Recursive function, which returns content object by content id.
+	 *
+     * @param {Integer} cid - content id.
+	 * @param {Object} parent.
+ 	 * @return {String} content.
+     */
     this.getContentById = function (cid, parent) {
         var parent = parent || this.siteObj,
             content = undefined,
@@ -154,12 +174,14 @@ function sitexml (path) {
         return content;
     };
 
-    /*
-     * Recursive
-     * @param {Integer} id - page id
-     * @param {Object} parent
-     * @requires this.siteObj
-     * */
+    /**
+     * Recursive function, which gets page by id, parent.
+	 *
+     * @param {Integer} id - page id.
+     * @param {Object} parent.
+     * @requires this.siteObj.
+	 * @return {undefined} undefined.
+     */
     this.getPageById = function (id, parent) {
         var page;
         parent = parent || (this.siteObj);
@@ -176,9 +198,11 @@ function sitexml (path) {
         return undefined;
     };
 
-    /*
+    /**
      * Returns default theme if PAGE@theme is not defined (see algorithm: http://sitexml.info/algorithms)
-     * */
+	 *
+	 * @return {undefined} theme.
+     */
     this.getDefaultTheme = function () {
         var theme = undefined;
         if (this.siteObj.themes && this.siteObj.themes.length > 0) {
@@ -194,11 +218,14 @@ function sitexml (path) {
         return theme;
     };
 
-    /*
-     * Returns theme object for a page, see algorithm here: http://sitexml.info/algorithms
+    /**
+	 * Function to get theme's object for a page(see algorithm: http://sitexml.info/algorithms)
+	 *
      * @param {Integer} id - page id
-     * @requires this.siteObj
-     * */
+	 * @param {Object} parent
+	 * @requires this.siteObj
+	 * @return {undefined} theme.
+     */
     this.getPageTheme = function (id, parent) {
         var tid, theme, page;
         if (id) {
@@ -223,8 +250,13 @@ function sitexml (path) {
         }
         return theme || undefined;
     };
-
-    //
+	
+	/**
+	* Function to get page's theme
+	*
+    * @param {Integer} tid - theme id.
+	* @return {undefined} theme.
+	*/
     this.getThemeById = function(id) {
         var theme;
         if (this.siteObj && this.siteObj.themes && this.siteObj.themes.length > 0) {
@@ -238,7 +270,12 @@ function sitexml (path) {
         return theme || undefined;
     };
 
-    //http://stackoverflow.com/questions/247483/http-get-request-in-javascript
+	/**
+	* Function for HTTP GET request(see: http://stackoverflow.com/questions/247483/http-get-request-in-javascript)
+	*
+    * @param {String} theUrl - theme id.
+	* @param {Function} callback - callback.
+	*/
     this.httpGetAsync = function (theUrl, callback) {
         var xmlHttp = new XMLHttpRequest();
         xmlHttp.onreadystatechange = function() {
@@ -253,8 +290,14 @@ function sitexml (path) {
         xmlHttp.open("GET", theUrl, true); // true for asynchronous
         xmlHttp.send(null);
     };
-
-    //https://stackoverflow.com/questions/9713058/send-post-data-using-xmlhttprequest
+    
+	/**
+	* Function for HTTP POST request(see: https://stackoverflow.com/questions/9713058/send-post-data-using-xmlhttprequest)
+	*
+    * @param {String} theUrl - theme id.
+	* @param {Array} params - paramters for the POST request.
+	* @param {Function} callback - callback.
+	*/
     this.httpPostAsync = function (theUrl, params, callback) {
         var xmlHttp = new XMLHttpRequest();
         xmlHttp.onreadystatechange = function() {
@@ -268,15 +311,20 @@ function sitexml (path) {
                 }
             }
         };
-        xmlHttp.open("POST", theUrl, true); // true for asynchronous
-        //Send the proper header information along with the request
-        xmlHttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xmlHttp.open("POST", theUrl, true); // Value is true for asynchronous param.
+        xmlHttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded"); //Send the proper header information along with the request.
         xmlHttp.send(params);
     };
 
-    //
+    /**
+	* Funtion to create a custom event that will be created.
+	*
+    * @param {undefined} element - page GUI element, e.g. window.
+	* @param {String} name - event's name.
+	* @param {String} data - ralated data conserning the event, e.g. id.
+	*/
     this.triggerEvent = function (element, name, data) {
-        var event; // The custom event that will be created
+        var event;
 
         if (document.createEvent) {
             event = document.createEvent("HTMLEvents");
@@ -298,7 +346,12 @@ function sitexml (path) {
         }
     };
 
-    //
+    /**
+	* Function to create a custom event that will be created.
+	*
+	* @param {String} xmlstring - string to be parsed.
+	* @return {DOM Object} oDOM - data for HTML and XML documents.
+	*/
     this.parseXML = function (xmlstring) {
         var oParser = new DOMParser(),
             oDOM = oParser.parseFromString(xmlstring, "text/xml");
@@ -309,7 +362,10 @@ function sitexml (path) {
         }
     };
 
-    //
+
+    /**
+	* Function to get a site object with all its attributes.
+	*/
     this.getSiteObj = function () {
         var site, page, meta, themes, theme,
             siteObj = {
@@ -344,107 +400,111 @@ function sitexml (path) {
             }
         }
 
-        /*
-         Returns page objects of the given parent element of the site tree
-         @returns {Array} - of objects
-         @param {DOM Object} - parent element
-         */
-        function getPages(parent) {
-            var ps, page, pages, subpages;
-            if (parent && parent.getElementsByTagName) {
-                ps = parent.getElementsByTagName('page');
-                ps = Array.prototype.slice.call(ps);
-                ps = ps.filter(function(v, i){
-                    return v.parentElement === parent;
-                });
-                if (ps.length) {
-                    pages = [];
-                    for (var i = 0, n = ps.length; i < n; i++) { if (ps.hasOwnProperty(i)) {
-                        page = {
-                            attributes : {
-                                id : ps[i].getAttribute('id'),
-                                name : ps[i].getAttribute('name'),
-                                alias : ps[i].getAttribute('alias'),
-                                theme : ps[i].getAttribute('theme'),
-                                nonavi : ps[i].getAttribute('nonavi'),
-                                startpage : ps[i].getAttribute('type')
-                            },
-                            content : getContent(ps[i]),
-                            metas : getMeta(ps[i])
-                        };
-                        subpages = getPages(ps[i]);
-                        if (subpages) {
-                            page.pages = subpages;
-                        }
-                        pages.push(page);
-                    }}
-                }
-            }
-            return pages;
-        }
+	/**
+	 * Returns page objects of the given parent element of the site tree.
+	 *
+	 * @param {DOM Object} parent - parent element.
+	 * @returns {Array} pages - of object array consiting of pages.
+	 */
+	function getPages(parent) {
+		var ps, page, pages, subpages;
+		if (parent && parent.getElementsByTagName) {
+			ps = parent.getElementsByTagName('page');
+			ps = Array.prototype.slice.call(ps);
+			ps = ps.filter(function(v, i){
+				return v.parentElement === parent;
+			});
+			if (ps.length) {
+				pages = [];
+				for (var i = 0, n = ps.length; i < n; i++) { if (ps.hasOwnProperty(i)) {
+					page = {
+						attributes : {
+							id : ps[i].getAttribute('id'),
+							name : ps[i].getAttribute('name'),
+							alias : ps[i].getAttribute('alias'),
+							theme : ps[i].getAttribute('theme'),
+							nonavi : ps[i].getAttribute('nonavi'),
+							startpage : ps[i].getAttribute('type')
+						},
+						content : getContent(ps[i]),
+						metas : getMeta(ps[i])
+					};
+					subpages = getPages(ps[i]);
+					if (subpages) {
+						page.pages = subpages;
+					}
+					pages.push(page);
+				}}
+			}
+		}
+		return pages;
+	}
 
-        /*
-         Returns meta objects of the given parent element of the site tree
-         @returns {Array} - of objects
-         @param {DOM Object} - parent element
-         */
-        function getMeta (parent) {
-            var metas, meta;
-            if (parent && parent.getElementsByTagName) {
-                metas = parent.getElementsByTagName('meta');
-                metas = Array.prototype.slice.call(metas);
-                metas = metas.filter(function(v, i){
-                    return v.parentElement === parent;
-                });
-                if (metas.length) {
-                    meta = [];
-                    for (var i = 0, n = metas.length; i < n; i++) { if (metas.hasOwnProperty(i)) {
-                        meta.push({
-                            attributes : {
-                                name : metas[i].getAttribute('name'),
-                                charset : metas[i].getAttribute('charset'),
-                                httpEquiv : metas[i].getAttribute('http-equiv'),
-                                scheme : metas[i].getAttribute('scheme'),
-                                content : metas[i].getAttribute('content')
-                            },
-                            content : metas[i].innerHTML
-                        });
-                    }}
-                }
-            }
-            return meta;
-        }
+	/**
+	 * Function to get meta objects of the given parent element of the site tree.
+	 *
+	 * @param {DOM Object} - parent element.
+	 * @returns {Array} meta - array consiting of meta data of the site.
+	 */
+	function getMeta (parent) {
+		var metas, meta;
+		if (parent && parent.getElementsByTagName) {
+			metas = parent.getElementsByTagName('meta');
+			metas = Array.prototype.slice.call(metas);
+			metas = metas.filter(function(v, i){
+				return v.parentElement === parent;
+			});
+			if (metas.length) {
+				meta = [];
+				for (var i = 0, n = metas.length; i < n; i++) { if (metas.hasOwnProperty(i)) {
+					meta.push({
+						attributes : {
+							name : metas[i].getAttribute('name'),
+							charset : metas[i].getAttribute('charset'),
+							httpEquiv : metas[i].getAttribute('http-equiv'),
+							scheme : metas[i].getAttribute('scheme'),
+							content : metas[i].getAttribute('content')
+						},
+						content : metas[i].innerHTML
+					});
+				}}
+			}
+		}
+		return meta;
+	}
 
-        /*
-         Returns content objects of the given parent element of the site tree
-         @returns {Array} - of objects
-         @param {DOM Object} - parent element
-         */
-        function getContent(parent) {
-            var cs, content;
-            if (parent && parent.getElementsByTagName) {
-                cs = parent.getElementsByTagName('content');
-                cs = Array.prototype.slice.call(cs);
-                cs = cs.filter(function(v, i){
-                    return v.parentElement === parent;
-                });
-                if (cs.length) {
-                    content = [];
-                    for (var i = 0, n = cs.length; i < n; i++) { if (cs.hasOwnProperty(i)) {
-                        content.push({
-                            attributes : {
-                                id : cs[i].getAttribute('id'),
-                                name : cs[i].getAttribute('name'),
-                                type : cs[i].getAttribute('type')
-                            },
-                            content : cs[i].innerHTML
-                        });
-                    }}
-                }
-            }
-            return content;
-        }
+	/**
+	 * Function to get content objects of the given parent element of the site tree.
+	 *
+	 * @param {DOM Object} - parent element
+	 * @returns {Array} content - array consiting of site content with diffrent attributes: id, name, type.
+	 */
+	function getContent(parent) {
+		var cs, content;
+		if (parent && parent.getElementsByTagName) {
+			cs = parent.getElementsByTagName('content');
+			cs = Array.prototype.slice.call(cs);
+			cs = cs.filter(function(v, i){
+				return v.parentElement === parent;
+			});
+			if (cs.length) {
+				content = [];
+				for (var i = 0, n = cs.length; i < n; i++) { if (cs.hasOwnProperty(i)) {
+					content.push({
+						attributes : {
+							id : cs[i].getAttribute('id'),
+							name : cs[i].getAttribute('name'),
+							type : cs[i].getAttribute('type')
+						},
+						content : cs[i].innerHTML
+					});
+				}}
+			}
+		}
+		return content;
+	}
 
         return siteObj;
     };
+	
 }
